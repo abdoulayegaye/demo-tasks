@@ -19,7 +19,25 @@ public class TaskService {
     }
 
     public Task createTask(Task task) {
+        if(taskRepository.getByName(task.getName()).isPresent()) {
+            throw new IllegalArgumentException("Task already exists");
+        }
         task.setCompleted(Boolean.FALSE);
         return taskRepository.save(task);
+    }
+
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id).get();
+    }
+
+    public Task updateTask(Long id, Task task) {
+        Task taskToUpdate = getTaskById(id);
+        taskToUpdate.setName(task.getName());
+        taskToUpdate.setCompleted(task.getCompleted());
+        return taskRepository.save(taskToUpdate);
+    }
+
+    public void deleteTaskById(Long id) {
+        taskRepository.deleteById(id);
     }
 }
