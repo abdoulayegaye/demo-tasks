@@ -1,5 +1,6 @@
 package com.xoslu.tech.taskdemo.service;
 
+import com.xoslu.tech.taskdemo.exception.TaskNotFoundException;
 import com.xoslu.tech.taskdemo.model.Task;
 import com.xoslu.tech.taskdemo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class TaskService {
 
     public Task createTask(Task task) {
         if(taskRepository.getByName(task.getName()).isPresent()) {
-            throw new IllegalArgumentException("Task already exists");
+            throw new TaskNotFoundException("Task Name = "+task.getName()+" already exists");
         }
         task.setCompleted(Boolean.FALSE);
         return taskRepository.save(task);
